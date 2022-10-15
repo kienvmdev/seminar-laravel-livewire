@@ -1,7 +1,7 @@
 ## Form validation
 ### 1. Intro
 Livewire sẽ cung cấp cho chúng ta `property $rules` cho việc setting validation trong mỗi form. và method `$this->validate()` sẽ tiến hành validate những property được xác định trong form.
-```
+```php
 class LoginForm extends Component
 {
     public $username;
@@ -39,11 +39,11 @@ Chúng ta có sử dụng `wire:submit.prevent, wire:model`
 **NOTE**: Nếu validation thất bại thì `ValidationException` sẽ được bắn ra và được livewire bắt, và `$errors object` sẽ có sẵn ở `view component`. Do vậy bạn có thể hoàn toàn xử lý chúng bao bao gồm cả blade mà bạn included.
 
 Ngoài ra bạn cũng có thể custom `key/message` trong error bag
-```
+```php
 $this->addError('key', 'message')
 ```
 Nếu bạn cần định phía rules dynamically , bạn có thể thay thế $rules property bằng method `rules()` ở component, vì `property $rules` chỉ nhận những rule cơ bản, với những case phức tạp, bắt buộc bạn phải dùng tới method `rules()` này:
-```
+```php
 use Rule;
 
 class Login extends Component
@@ -66,7 +66,7 @@ class Login extends Component
 ```
 ### 2. Real-time Validation
 Đôi lúc bạn muốn ô input nào đó sẽ được validate tức khắc khi người dùng nhập đó, Livewire có thể làm được nó 1 cách dễ dàng với phương thức `$this->validateOnly()`: quay về form ban nãy, chúng ta sẽ thêm method `updated()`, cái này là 1 `Lifecycle hooks` của livewire
-```
+```php
 class Login extends Component
 {
     public $username;
@@ -93,7 +93,7 @@ Vậy tại sao không dùng `$this->validated()` mà lại dùng `$this->valida
 
 Validating with rules outside of the `$rules property`
 Thật ra cách này thì cũng như những validate trên, nhưng thay vì ta khai báo `$rules` thì t sẽ khi báo mảng đó ở :
-```
+```php
 $this->validateOnly($propertyName, [
 	'username' => 'min:6',
 	'password' => 'min:6',
@@ -110,7 +110,7 @@ Nguồn: https://laravel-livewire.com/docs/2.x/input-validation
 
 ### 3. Customize Error Message & Attributes
 Request của Laravel :
-```
+```php
    ...
    public function rules()
    {
@@ -135,7 +135,7 @@ Request của Laravel :
    }
 ```
 Trong laravel livewire
-```
+```php
 public $email;
 
 protected $rules = [
@@ -165,7 +165,7 @@ $validatedData = $this->validate(
 2 method `validate() and validateOnly()` sẽ handle trong mọi case, nhưng thỉnh thoảng bạn có thể control lại Livewire’s ErrorBag, kiểu kiểm soát lại việc show lỗi.
 
 Livewire cung cấp một số phương pháp để bạn thao tác trực tiếp với ErrorBag.
-```
+```php
 // Cách nhanh nhất để thêm message vào error bag
 $this->addError('email', 'The email field is invalid.');
 
@@ -184,7 +184,7 @@ $errors->add('some-key', 'Some message');
 ```
 ### 5. Custom validators
 Ngoài ra bạn có thể dùng `use Illuminate\Support\Facades\Validator;` để custom lại theo ý bạn muốn
-```
+```php
 $validatedData = Validator::make(
 	['email' => $this->email],
 	['email' => 'required|email'],

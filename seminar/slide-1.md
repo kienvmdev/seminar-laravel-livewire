@@ -3,13 +3,13 @@ Livewire là một full-stack framework Laravel giúp cho việc xây dựng cá
 Thực ra là nhúng các file js và css của livewire. thay vì sử dụng jquery. nhưng vẫn có thể kết hợp với js thuần hoặc jquery để xử lý một số tác vụ
 ## 1. Installation
 Chúng ta sẽ cài đặt thông qua composer như sau :
-```
+```php
 composer require livewire/livewire
 ```
 Sau khi cài đặt thành công chỉ cần bạn `include` chúng vào nơi mà bạn cần dùng là được, ví dụ ở đây mình sẽ include vào `app.blade.php` để toàn bộ ứng dụng của mình sẽ được sử dụng livewire
 
 `app.blade.php`
-```
+```php
  ...
   @livewireStyles
 </head>
@@ -23,7 +23,7 @@ Sau khi cài đặt thành công chỉ cần bạn `include` chúng vào nơi m�
 Tạo 1 livewire component bằng command line:
 ```php artisan make:livewire TestComponent```
 tự động generate ra 2 file :
-```
+```php
 App\Http\Livewire\TestComponent.php
 
 namespace App\Http\Livewire;
@@ -46,7 +46,7 @@ class TestComponent extends Component
 ```
 sau đó include nó vào file app.blade.php và xem kết quả :
 
-```
+```php
 <livewire:test-component />
 or
 @livewire('test-component')
@@ -55,7 +55,7 @@ or
 
 Khái niệm đầu tiên và quan trọng nhất để hiểu khi sử dụng LiveWire là `data binding`. 
 Đây là phần cốt lõi của `Livewire` nên các bạn đặc biệt chú trọng với nó. Khái niệm này khá giống với `two way data binding` ở `angular và vue`:
-```
+```php
 class Message extends Component
 {
    public $message = 'new message';
@@ -69,7 +69,7 @@ Data binding theo ví dụ trên có nghĩa là : Một thuộc tính `public` c
 vậy có nghĩa là khi thuộc tính này được `change` ở view thì ở component sẽ update theo và ngược lại. Tìm hiểu ví dụ:
 
 Tại html view ta thêm 1 ô input :
-```
+```php
 <div>
 	<input type="text" wire:model="message" />
         <p>{{ $message }}</p>
@@ -84,7 +84,7 @@ Data sẽ được lưu dưới dạng public để có thể hiện thị phía
 VÌ data nó sẽ được mapping với phía js cho nên những property này phải được mapping type với js (string, int, array, boolean) hoặc là với php (Stringable, Collection, DateTime, Model, EloquentCollection).
 Binding Directly To Model Properties:
 Ngoài ra nó còn support chúng ta binding vào model nếu khai báo nó public:
-```
+```php
 use App\Post;
 
 class PostForm extends Component
@@ -114,7 +114,7 @@ class PostForm extends Component
 Như vậy khi bạn submit, mặc định các data sẽ được set vào model.
 
 ** Chú ý ** : $rules khai báo các field phải mapping với attr của model. ngoài ra nếu muốn check các rules nâng cao thì làm như sau :
-```
+```php
 ...
 protected $rules = []
 ...
@@ -128,14 +128,14 @@ public function rules()
 ```
 ## 3.Actions:
 Chúng như các framework FE khác thì livewire cũng có những actions tương tự để tương tác với người dùng, vd như :
-```
+```php
 Event	Directive
 click	wire:click
 keydown	wire:keydown
 submit	wire:submit
 ```
 Nhìn khá giống với angular hoặc vue
-```
+```php
 <button wire:click="doSomething">Do Something</button>
 
 <input wire:keydown.enter="doSomething">
@@ -146,18 +146,18 @@ Nhìn khá giống với angular hoặc vue
 </form>
 ```
 **Bạn có thể listen cho bất kỳ event dispatched bởi element mà bạn binding**
-```
+```php
 <button wire:somethingDispatcher="someAction">
 ```
 Passing Action Parameters
 Bạn cũng có thể truyền các action, param vào
-```
+```php
 <button wire:click="addTodo({{ $todo->id }}, '{{ $todo->name }}')">
     Add Todo
 </button>
 ```
 Và ở component ta khai báo actions
-```
+```php
 public function addTodo($id, $name)
 {
     // do something
@@ -176,7 +176,7 @@ public function addTodo(TodoService $todoService, $id, $name)
 Nguồn: https://laravel-livewire.com/docs/2.x/actions
 
 ## Lifecycle Hooks khá giống với các FE framework khác
-```
+```php
 Hooks	  Description
 mount	  Chỉ chạy 1 lần, sau khi components đc khởi tạo và trước khi render()
 hydrate	  Chạy mỗi khi có request, thực hiện trước khi exec 1 action hoặc render()
@@ -205,7 +205,7 @@ class TestComponent extends Component
 ```
 Javascript Hooks
 Ngoài class Lifecycle ra thì ở FE của js cũng có `Lifecycle`:
-```
+```js
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         Livewire.hook('component.initialized', (component) => {}) // khởi tạo
@@ -227,7 +227,7 @@ Nguồn: https://laravel-livewire.com/docs/2.x/lifecycle-hooks
 ## Nesting Components
 `Nested components` có thể nhận data parameters từ parent của nó, Tuy nhiên chúng không reactive như props từ `vue component`
 Livewire component không nên được dùng cho các trường hợp tách nhỏ như blade files, đối với như này, chúng ta cứ dùng `include` của blade thì tốt hơn:
-```
+```php
 class UserDashboard extends Component
 {
     public User $user;
@@ -251,7 +251,7 @@ Một phần rất quan trọng của livewire, cũng như các framework, libra
 
 #### Firing Events
 Có 3 cách để `firing events`.
-```
+```php
 <!-- từ template -->
 <button wire:click="$emit('postAdded')">
 // từ component
@@ -262,7 +262,7 @@ $this->emit('postAdded');
 </script>
 ```
 Thì sau khi chúng ta fire một event thì chắc sẽ có listener để nghe nó, và sẽ được define trong component như sau :
-```
+```php
 class ShowPosts extends Component
 {
     public $postCount;
@@ -284,7 +284,7 @@ class ShowPosts extends Component
 ```
 Passing Parameters
 Chỉ cần 1 ví dụ là hiểu được ngay , ngắn gọn xúc tích.
-```
+```php
 $this->emit('postAdded', $post->id);
 
 
@@ -300,7 +300,7 @@ Nguồn: https://laravel-livewire.com/docs/2.x/events
 ## Scoping Events
 --- Scoping To Parent Listeners
 Khi làm việc với nested components, thỉnh thoảng bạn chỉ muốn emit events đến parents và không emit tới `children` hoặc `sibling` components.
-```
+```php
 $this->emitUp('postAdded');
 hoặc
 
@@ -326,11 +326,11 @@ Livewire.on('postAdded', postId => {
 ```
 ## Dispatching Browser Events
 Livewire cho phép bạn fire browser window event như sau:
-```
+```php
 $this->dispatchBrowserEvent('name-updated', ['newName' => $value]);
 ```
 Và bạn sẽ listen nó như sau:
-```
+```js
 <script>
 window.addEventListener('name-updated', event => {
     alert('Name updated to: ' + event.detail.newName);

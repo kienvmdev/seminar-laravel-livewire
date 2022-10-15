@@ -1,6 +1,6 @@
 ### Query String
 Với livewire chúng ta sẽ dễ dàng search không lo load lại trang và live query string trên `url` một cách dễ dàng:
-```
+```php
 class SearchPosts extends Component
 {
     public $search;
@@ -38,7 +38,7 @@ Tham khảo tại đây: https://laravel-livewire.com/docs/2.x/properties#deboun
 
 Keeping A Clean Query String
 Trong nhiều trường hợp, ví dụ bạn keyword search của bạn empty thì nó sẽ như này : ?search= Tuy nhiên livewire lại không hiển như vậy.
-```
+```php
 class SearchPosts extends Component
 {
     public $foo;
@@ -59,7 +59,7 @@ Nguồn: https://laravel-livewire.com/docs/2.x/query-string
 
 ### Authorization
 Ở laravel, khi ta muốn phân quyền cho 1 actions nào đó, ta sẽ dùng authorize trong method đó, và livewire cũng đc, bạn có thể sử dụng trait `AuthorizesRequests` trong bất kì component nào, và `call $this->authorize()` như bạn call ở controller.
-```
+```php
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class EditPost extends \Livewire\Component
@@ -82,7 +82,7 @@ class EditPost extends \Livewire\Component
 }
 ```
 Cách sử dụng giống trong controller.
-```
+```php
 ...
 'middleware_group' => ['web', 'auth:otherguard'],
 ...
@@ -97,7 +97,7 @@ vì vậy nó sẽ giống như một tính năng bình thường đối với b
 #### Paginating Data
 Bây giờ bạn hãy tạo 1 component là `show post` để thực hiện phân trang, bạn có thể sử dụng phân trang như cách bình thường 
 Nếu bạn sử dụng `trait WithPagination`, nó sẽ giúp bạn phân trang mượt mà, linh động và không cần load lại trang.
-```
+```php
 use Livewire\WithPagination;
 
 class ShowPosts extends Component
@@ -125,7 +125,7 @@ class ShowPosts extends Component
 Đôi lúc, lúc bạn đang ở trang 5, mà giờ bạn search 1 thứ gì đó có có 1 kết quả thì bạn đáng ra phải ở trang 1, 
 nếu không bạn ở mãi trang 5 và không có data gì, vì vậy livewire sẽ cung cấp cho ta 1 cách là mỗi lần bạn apply filter, 
 sẽ giúp bạn tự động quay về trang đầu, để được cải thiện UX hơn:
-```
+```php
 use Livewire\WithPagination;
 
 class ShowPosts extends Component
@@ -147,7 +147,7 @@ Với `WithPagination` bạn có thể sử dụng method `resetPage()`, nó s�
 
 #### Using The Bootstrap Pagination Theme
 Như laravel, phân trang sẽ sử dụng theme mặc định, đối với `livewire` nó sẽ mặc định là dùng `tailwind css` làm theme mặc định, nếu bạn muốn sử dụng `bootstrap` làm theme, chỉ cần khai báo :
-```
+```php
 class ShowPosts extends Component
 {
     use WithPagination;
@@ -161,7 +161,7 @@ Khi dùng pagination và dùng mặc định, Đa số mọi người sẽ custo
 Có 3 cách để bạn custom pagination:
 
 **Pass view name vào ->links() ở component**
-```
+```php
 <div>
     @foreach ($posts as $post)
         ...
@@ -171,7 +171,7 @@ Có 3 cách để bạn custom pagination:
 </div>
 ```
 **Ghi đè lại method paginationView() của trait WithPagination:**
-```
+```php
 class ShowPosts extends Component
 {
     use WithPagination;
@@ -187,7 +187,7 @@ class ShowPosts extends Component
 }
 ```
 **Publish view ra và custom trong đó:** `php artisan livewire:publish --pagination`
-```
+```php
 <div>
     @if ($paginator->hasPages())
         <nav role="navigation" aria-label="Pagination Navigation" class="flex justify-between">
@@ -221,7 +221,7 @@ class ShowPosts extends Component
 </div>
 ```
 Như laravel thông thường, nó sẽ dùng thẻ <a> chuyển trang, nhưng bạn thấy `wire:click="previousPage"`, wire:click="nextPage" được sử dụng ở đây, cái này nằm ở trong `trait WithPagination` và nó sẽ giúp ta re-render component và không cần load lại. Ngoài ra có nhiều method khác như :
-```
+```php
 <?php
 ...
 trait WithPagination
@@ -260,7 +260,7 @@ Nguồn: https://laravel-livewire.com/docs/2.x/pagination
 
 ### Redirecting
 Bạn có thể muốn chuyển hướng từ bên trong một thành phần Livewire đến một trang khác trong ứng dụng của mình. Livewire hỗ trợ cú pháp phản hồi chuyển hướng tiêu chuẩn mà bạn đã quen sử dụng trong Controller Laravel.
-```
+```php
 class ContactForm extends Component
 {
     public $email;
@@ -278,7 +278,7 @@ Livewire sử dụng bộ chuyển hướng của laravel, nên bạn cũng có 
 
 ### Flash Messages
 Flash message của livewire cũng sử dụng lại của laravel, nên bạn cứ sử dụng 1 cách bth như lâu nay sử udnjg :D
-```
+```php
 public function update()
 {
 	$this->validate();
@@ -292,7 +292,7 @@ public function update()
 @endif
 ```
 Bạn cũng có thể sử flash và redirect luôn, như bạn làm thông thường với laravel
-```
+```php
 session()->flash('message', 'Post successfully updated.');
 
 return redirect()->to('/posts');
@@ -301,7 +301,7 @@ Nguồn: https://laravel-livewire.com/docs/2.x/redirecting
 
 ### Traits
 Cái này chắc không con xa lạ gì khi bạn làm việc với php, nhưng đối với livewire giống `mixin` trong `vuejs`, và có thể sử dụng lại các method ở nhiều component. Ở đây chúng ta tạo 1 trait đơn giản:
-```
+```php
 trait WithSorting
 {
     public $sortBy = '';
@@ -351,7 +351,7 @@ class ShowPosts extends Component
 }
 ```
 Ngoài ra, cũng có thể áp dụng `lifecycle hook` vào :
-```
+```php
 trait WithSorting
 {
     ...
